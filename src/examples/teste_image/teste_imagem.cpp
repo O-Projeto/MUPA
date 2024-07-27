@@ -8,7 +8,7 @@ void setup(){
     d.setRotation(1);
     d.setSwapBytes(true);
     d.fillScreen(TFT_BLACK);
-    d.pushImage(20,20,196,240,imagem);
+    // d.pushImage(20,20,196,240,imagem);
 }
 
 void loop(){

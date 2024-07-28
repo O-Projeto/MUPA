@@ -155,74 +155,94 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
     funcoes.setCursor(0, 10); 
     funcoes.setTextColor(TFT_BLACK);
-    if (index == 0) {
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
-        funcoes.println("1.Abrir mao");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("pong");
-    } else {
-        funcoes.println("1.Abrir mao");
-    }
-
-    funcoes.setCursor(0, 40); 
-    if (index == 1) {
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+    if(index == 7){
         funcoes.println("2.Fechar mao");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("2.Fechar mao");
-    }
-
-    funcoes.setCursor(0, 70); 
-    if (index == 2) {
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+        funcoes.setCursor(0, 40);
         funcoes.println("3.Abrir dedao");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("3.Abrir dedao");
-    }
-
-    funcoes.setCursor(0, 100); 
-     if (index == 3) {
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+        funcoes.setCursor(0, 70);
         funcoes.println("4.Fechar dedao");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("4.Fechar dedao");
-    }
-
-    funcoes.setCursor(0, 130); 
-     if (index == 4) {
-        funcoes.setTextColor(TFT_PINK, TFT_BLACK);
+        funcoes.setCursor(0, 100);
         funcoes.println("5.Esperar");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("5.Esperar");
-    }
-
-    
-    funcoes.setCursor(0, 160); 
-     if (index == 5) {
-        funcoes.setTextColor(TFT_RED, TFT_BLACK);
+        funcoes.setCursor(0, 130);
         funcoes.println("Remover");
-        funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("Remover");
-    }
-
-     funcoes.setCursor(0, 190); 
-     if (index == 6) {
+        funcoes.setCursor(0, 160);
+        funcoes.println("Remover tudo");
+        funcoes.setCursor(0, 190);
         funcoes.setTextColor(TFT_GREEN, TFT_BLACK);
         funcoes.println("Executar");
         funcoes.setTextColor(TFT_BLACK);
-        // Serial.println("dino");
-    } else {
-        funcoes.println("Executar");
+
+    }
+    else{
+        if (index == 0) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println("1.Abrir mao");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("pong");
+        } else {
+            funcoes.println("1.Abrir mao");
+        }
+
+        funcoes.setCursor(0, 40); 
+        if (index == 1) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println("2.Fechar mao");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("2.Fechar mao");
+        }
+
+        funcoes.setCursor(0, 70); 
+        if (index == 2) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println("3.Abrir dedao");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("3.Abrir dedao");
+        }
+
+        funcoes.setCursor(0, 100); 
+        if (index == 3) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println("4.Fechar dedao");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("4.Fechar dedao");
+        }
+
+        funcoes.setCursor(0, 130); 
+        if (index == 4) {
+            funcoes.setTextColor(TFT_PINK, TFT_BLACK);
+            funcoes.println("5.Esperar");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("5.Esperar");
+        }
+
+        
+        funcoes.setCursor(0, 160); 
+        if (index == 5) {
+            funcoes.setTextColor(TFT_RED, TFT_BLACK);
+            funcoes.println("Remover");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("Remover");
+        }
+
+        funcoes.setCursor(0, 190); 
+        if (index == 6) {
+            funcoes.setTextColor(TFT_RED, TFT_BLACK);
+            funcoes.println("Remover tudo");
+            funcoes.setTextColor(TFT_BLACK);
+            // Serial.println("dino");
+        } else {
+            funcoes.println("Remover tudo");
+        }
     }
     funcoes.pushSprite(0, 0);
 

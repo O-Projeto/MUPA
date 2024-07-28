@@ -25,10 +25,11 @@ void setup() {
   pinMode(botao::button_3, INPUT);
 
   funcoes.setColorDepth(8);
-  funcoes.createSprite(180, 240);
+  funcoes.createSprite(200, 240);
 
   stack.setColorDepth(8);
-  stack.createSprite(70, 240);
+  stack.createSprite(70, 240);  
+  funcao.init_screen(tft);
 }
 
 void loop() {

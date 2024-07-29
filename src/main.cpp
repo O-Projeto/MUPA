@@ -3,6 +3,7 @@
 #include "led_rgb.h"
 #include "screenController.h"
 
+oi seu lindo 
 #include <TFT_eSPI.h>
 #include <SPI.h>
 
@@ -93,10 +94,10 @@ void setup() {
     tft.fillScreen(TFT_WHITE);
 
     funcoes.setColorDepth(8);
-    funcoes.createSprite(200, 240);
+    funcoes.createSprite(220, 240);
 
     stack.setColorDepth(8);
-    stack.createSprite(70, 240);  
+    stack.createSprite(100, 240);  
     funcao.init_screen(tft);
 
     /*pinMode(BUTTON_1, INPUT_PULLUP);
@@ -123,7 +124,7 @@ void loop() {
     funcao.draw_funcoes(funcoes, index_, stack);
     if((button_press = readButton()) && (button_press != last_button)){
         funcao.track_position(index_, button_press);
-        funcao.select(index_, button_press);
+        funcao.select(index_, button_press, tft);
     }
     last_button = button_press;
     /*if((button_press = readButton()) && (button_press != last_button)){

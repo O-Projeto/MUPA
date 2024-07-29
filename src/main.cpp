@@ -23,6 +23,8 @@
 #define CIANO 3407871
 #define LARANJA 16093234
 #define LIMAO 13434777
+#define CIANO_ESCURO 31
+#define VINHO 15759367
 
 // Movimento
 /*#define LIM_SUP_DEDAO 180
@@ -60,7 +62,7 @@ Funcoes funcao(index_);
 int button_press = 0, last_button = 1, option = 0;
 int lastOption = 1;
 
-const int colors[] = {VERMELHO, VERDE, AZUL, AMARELO, MAGENTA, CIANO, LARANJA, LIMAO};
+const int colors[] = {VERMELHO, VERDE, AZUL, AMARELO, VINHO, CIANO_ESCURO, MAGENTA, CIANO, LARANJA, LIMAO};
 
 /*ServoController servo_1 = ServoController(27);
 ServoController servo_2 = ServoController(14);

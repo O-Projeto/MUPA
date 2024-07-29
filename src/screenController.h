@@ -15,10 +15,14 @@
 
 #define T_ESPERA 1000
 
+#define TFT_CYAN_DARK 0x001F
+#define TFT_WINE 0xFA60
+
+const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TFT_CYAN_DARK, TFT_MAGENTA};
 
 //Interface
-#define MAX_STACK_SIZE 6
-#define NUM_COLORS 7
+#define MAX_STACK_SIZE 7
+#define NUM_COLORS 9
 
 ServoController servo_1 = ServoController(27);
 ServoController servo_2 = ServoController(14);
@@ -71,8 +75,18 @@ void Funcoes::execStack(void){
                 servo_2.control.write(LIM_INF_DEDAO);
                 delay(TIME_SERVOS);
                 break;
-            //Func espera
+            //Func abre dedos
             case 5:
+                servo_1.control.write(LIM_SUP_DEDOS);
+                delay(TIME_SERVOS);
+                break;
+            //Func fecha dedos
+            case 6:
+                servo_1.control.write(LIM_INF_DEDOS);
+                delay(TIME_SERVOS);
+                break;
+            //Func espera
+            case 7:
                 delay(T_ESPERA);
                 break;
         }
@@ -116,20 +130,20 @@ void Funcoes::track_position(int &index, int &button){
 
 void Funcoes::select(int &index, int &button) {
     if(button == 3){
-            if(index <= 4 && stackSize < MAX_STACK_SIZE){
+            if(index <= 6 && stackSize < MAX_STACK_SIZE){
                 stack[stackSize++] = index+1;
             }
             else{
                 switch (index){
-                    case 5:
+                    case 7:
                         if (stackSize > 0) {
-                            stack[stackSize--] = 0;
+                            stackSize--;
                         }
                         break;
-                    case 6:
+                    case 8:
                         stackSize = 0;
                         break;
-                    case 7: 
+                    case 9: 
                         //exec stack
                         execStack();
                         break;
@@ -155,14 +169,14 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
     funcoes.setCursor(0, 10); 
     funcoes.setTextColor(TFT_BLACK);
-    if(index == 7){
-        funcoes.println("2.Fechar mao");
+    if(index == 9){
+        funcoes.println("4.Abrir dedao");
         funcoes.setCursor(0, 40);
-        funcoes.println("3.Abrir dedao");
+        funcoes.println("5.Abrir dedos");
         funcoes.setCursor(0, 70);
-        funcoes.println("4.Fechar dedao");
+        funcoes.println("6.Fechar dedos");
         funcoes.setCursor(0, 100);
-        funcoes.println("5.Esperar");
+        funcoes.println("7.Esperar");
         funcoes.setCursor(0, 130);
         funcoes.println("Remover");
         funcoes.setCursor(0, 160);
@@ -173,9 +187,45 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
         funcoes.setTextColor(TFT_BLACK);
 
     }
+    else if(index == 8){
+        funcoes.println("3.Abrir dedao");
+        funcoes.setCursor(0, 40);
+        funcoes.println("4.Fechar dedao");
+        funcoes.setCursor(0, 70);
+        funcoes.println("5.Abrir dedos");
+        funcoes.setCursor(0, 100);
+        funcoes.println("6.Fechar dedos");
+        funcoes.setCursor(0, 130);
+        funcoes.println("7.Esperar");
+        funcoes.setCursor(0, 160);
+        funcoes.println("Remover");
+        funcoes.setCursor(0, 190);
+        funcoes.setTextColor(TFT_RED, TFT_BLACK);
+        funcoes.println("Remover tudo");
+        funcoes.setTextColor(TFT_BLACK);
+
+    }
+    else if(index == 7){
+        funcoes.println("2.Fechar mao");
+        funcoes.setCursor(0, 40);
+        funcoes.println("3.Abrir dedao");
+        funcoes.setCursor(0, 70);
+        funcoes.println("4.Fechar dedao");
+        funcoes.setCursor(0, 100);
+        funcoes.println("5.Abrir dedos");
+        funcoes.setCursor(0, 130);
+        funcoes.println("6.Fechar dedos");
+        funcoes.setCursor(0, 160);
+        funcoes.println("7.Esperar");
+        funcoes.setCursor(0, 190);
+        funcoes.setTextColor(TFT_RED, TFT_BLACK);
+        funcoes.println("Remover");
+        funcoes.setTextColor(TFT_BLACK);
+
+    }
     else{
         if (index == 0) {
-            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.setTextColor(TFT_WHITE, TFT_RED);
             funcoes.println("1.Abrir mao");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("pong");
@@ -185,7 +235,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
         funcoes.setCursor(0, 40); 
         if (index == 1) {
-            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK, TFT_GREEN);
             funcoes.println("2.Fechar mao");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
@@ -195,7 +245,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
         funcoes.setCursor(0, 70); 
         if (index == 2) {
-            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK, TFT_CYAN);
             funcoes.println("3.Abrir dedao");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
@@ -205,7 +255,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
         funcoes.setCursor(0, 100); 
         if (index == 3) {
-            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK, TFT_YELLOW);
             funcoes.println("4.Fechar dedao");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
@@ -215,33 +265,33 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
 
         funcoes.setCursor(0, 130); 
         if (index == 4) {
-            funcoes.setTextColor(TFT_PINK, TFT_BLACK);
-            funcoes.println("5.Esperar");
+            funcoes.setTextColor(TFT_WHITE, TFT_WINE);
+            funcoes.println("5.Abrir dedos");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
         } else {
-            funcoes.println("5.Esperar");
+            funcoes.println("5.Abrir dedos");
         }
 
         
         funcoes.setCursor(0, 160); 
         if (index == 5) {
-            funcoes.setTextColor(TFT_RED, TFT_BLACK);
-            funcoes.println("Remover");
+            funcoes.setTextColor(TFT_WHITE, TFT_CYAN_DARK);
+            funcoes.println("6.Fechar dedos");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
         } else {
-            funcoes.println("Remover");
+            funcoes.println("6.Fechar dedos");
         }
 
         funcoes.setCursor(0, 190); 
         if (index == 6) {
-            funcoes.setTextColor(TFT_RED, TFT_BLACK);
-            funcoes.println("Remover tudo");
+            funcoes.setTextColor(TFT_WHITE, TFT_MAGENTA);
+            funcoes.println("7.Esperar");
             funcoes.setTextColor(TFT_BLACK);
             // Serial.println("dino");
         } else {
-            funcoes.println("Remover tudo");
+            funcoes.println("7.Esperar");
         }
     }
     funcoes.pushSprite(0, 0);
@@ -253,8 +303,8 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
     stackSprite.println("Pilha");
     for (int i = 0; i < stackSize; i++) {
         stackSprite.setCursor(220, 20 + i * 25); // Ajuste o espaçamento conforme necessário
-        stackSprite.setTextColor(TFT_BLACK);
-        stackSprite.println(stack[i]);
+        stackSprite.setTextColor(TFT_BLACK, backColors[stack[i]-1]);
+        stackSprite.printf(" %d \n", stack[i]);
     }
     stackSprite.pushSprite(230, 0);
 

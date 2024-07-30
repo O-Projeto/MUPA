@@ -5,6 +5,7 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include <ServoController.hpp>
+#include <logo.h>
 
 // Servo
 #define LIM_SUP_DEDAO 180
@@ -103,6 +104,9 @@ void Funcoes::init_screen(TFT_eSPI &d){
     d.fillScreen(TFT_WHITE);
     d.setTextColor(TFT_BLUE);
     d.setTextSize(4);
+    d.setSwapBytes(true);
+    //d.pushImage(20,20,196,240,logo);
+    delay(2000);
     // Define a cor e o tamanho do texto
     d.setTextDatum(TC_DATUM);
     d.setCursor(50, 90);

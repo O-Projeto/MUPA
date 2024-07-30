@@ -5,7 +5,7 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include <ServoController.hpp>
-#include <logo.h>
+// #include <logo.h>
 
 // Servo
 #define LIM_SUP_DEDAO 180
@@ -22,7 +22,7 @@
 const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TFT_CYAN_DARK, TFT_MAGENTA};
 
 //Interface
-#define MAX_STACK_SIZE 6
+#define MAX_STACK_SIZE 7
 #define NUM_COLORS 9
 
 ServoController servo_1 = ServoController(27);
@@ -58,17 +58,14 @@ void Funcoes::execStack(void){
         switch (stack[i]){
             //Func abrir mao
             case 1:
-                servo_2.control.write(LIM_INF_DEDOS);
-                delay(500);
-                servo_1.control.write(LIM_INF_DEDAO);
-                
+                servo_1.control.write(LIM_SUP_DEDAO);
+                servo_2.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func fecha mao
             case 2:
-                servo_1.control.write(LIM_SUP_DEDAO);
-                delay(500);
-                servo_2.control.write(LIM_SUP_DEDOS);
+                servo_1.control.write(LIM_INF_DEDAO);
+                servo_2.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func abrir dedao

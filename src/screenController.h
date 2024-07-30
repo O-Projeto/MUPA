@@ -22,6 +22,7 @@ class Funcoes{
         unsigned long lastDebounceTimeBotoes = 0;
         const unsigned long debounceDelay = 50;
         int error = 0;
+      
         
     public:
         Funcoes(int index):index(index){}
@@ -30,17 +31,19 @@ class Funcoes{
         void track_position(int &index, int &button);
         void select(int &index, int &button, TFT_eSPI &d);
         void init_screen(TFT_eSPI &d);
-        void execStack(void);
-        void bad_func(TFT_eSPI &d);
+        void execStack( TFT_eSPI &d);
+        //recieves message and color -> show message in screen with the leter in the color 
+        void show_pop_up(TFT_eSPI &d,const char* message,int textColor);
 
 };
 
-void Funcoes::execStack(void){
+void Funcoes::execStack( TFT_eSPI &d){
     int i;
     for(i = 0; i < stackSize; i++){
         switch (stack[i]){
             //Func abrir mao
             case 1:
+                show_pop_up(d,"Abrir Mao",TFT_RED);
                 servo_tumb.control.write(LIM_SUP_DEDAO);
                 servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
@@ -81,6 +84,7 @@ void Funcoes::execStack(void){
 
 
 void Funcoes::init_screen(TFT_eSPI &d){
+    
     d.fillScreen(TFT_WHITE);
     d.setTextColor(TFT_BLUE);
     d.setTextSize(4);
@@ -100,15 +104,14 @@ void Funcoes::init_screen(TFT_eSPI &d){
     
 }
 
-void Funcoes::bad_func(TFT_eSPI &d){
+void Funcoes::show_pop_up(TFT_eSPI &d, const char* message, int textColor) {
     d.fillScreen(TFT_WHITE);
-    d.setTextColor(TFT_RED);
+    d.setTextColor(textColor);
     d.setTextDatum(TC_DATUM);
-    d.drawCentreString("Erro", 160, 80, 4);
+    d.drawCentreString(message, 160, 80, 4);
     delay(2000);
     d.fillScreen(TFT_WHITE);
 }
-
 void Funcoes::track_position(int &index, int &button){
     switch(button){
         case 1:
@@ -145,7 +148,7 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
                         break;
                     case 9: 
                         //exec stack
-                        execStack();
+                        execStack(d);
                         break;
                 }
             }

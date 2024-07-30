@@ -36,7 +36,7 @@ int readButton(void);
 
 void setup() {
     Serial.begin(115200);
-    
+
     servo_tumb.SetupServo();
     servo_fingers.SetupServo();
 
@@ -70,6 +70,7 @@ void setup() {
 }
 
 void loop() {
+    //? update image ? 
     funcao.draw_funcoes(funcoes, index_, stack);
     if((button_press = readButton()) && (button_press != last_button)){
         funcao.track_position(index_, button_press);
@@ -80,6 +81,8 @@ void loop() {
 }
 
 void TaskLed(void *PvParameters){
+
+  //? pq precisa de uma task pra isso ? 
   while (1)
   {
    
@@ -90,6 +93,8 @@ void TaskLed(void *PvParameters){
 
 
 // Lê se um botão for pressionado
+//? retorna oq ? 
+
 int readButton(void){
     int button_high = 0;
     int tempo = 0;

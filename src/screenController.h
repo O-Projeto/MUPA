@@ -7,26 +7,9 @@
 #include <ServoController.hpp>
 // #include <logo.h>
 
-// Servo
-#define LIM_SUP_DEDAO 180
-#define LIM_INF_DEDAO 0
-#define LIM_SUP_DEDOS 180
-#define LIM_INF_DEDOS 0
-#define TIME_SERVOS 1000
 
-#define T_ESPERA 1000
-
-#define TFT_CYAN_DARK 0x001F
-#define TFT_WINE 0xFA60
-
-const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TFT_CYAN_DARK, TFT_MAGENTA};
-
-//Interface
-#define MAX_STACK_SIZE 7
-#define NUM_COLORS 9
-
-ServoController servo_1 = ServoController(27);
-ServoController servo_2 = ServoController(14);
+ServoController servo_tumb = ServoController(SERVO_TUMB_PIN);
+ServoController servo_fingers = ServoController(SERVO_FINGER_PIN);
 
 class Funcoes{
     private:
@@ -58,34 +41,34 @@ void Funcoes::execStack(void){
         switch (stack[i]){
             //Func abrir mao
             case 1:
-                servo_1.control.write(LIM_SUP_DEDAO);
-                servo_2.control.write(LIM_SUP_DEDOS);
+                servo_tumb.control.write(LIM_SUP_DEDAO);
+                servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func fecha mao
             case 2:
-                servo_1.control.write(LIM_INF_DEDAO);
-                servo_2.control.write(LIM_INF_DEDOS);
+                servo_tumb.control.write(LIM_INF_DEDAO);
+                servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func abrir dedao
             case 3:
-                servo_2.control.write(LIM_SUP_DEDAO);
+                servo_fingers.control.write(LIM_SUP_DEDAO);
                 delay(TIME_SERVOS);
                 break;
             //Func fechar dedao
             case 4:
-                servo_2.control.write(LIM_INF_DEDAO);
+                servo_fingers.control.write(LIM_INF_DEDAO);
                 delay(TIME_SERVOS);
                 break;
             //Func abre dedos
             case 5:
-                servo_1.control.write(LIM_SUP_DEDOS);
+                servo_tumb.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func fecha dedos
             case 6:
-                servo_1.control.write(LIM_INF_DEDOS);
+                servo_tumb.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func espera

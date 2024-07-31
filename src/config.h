@@ -6,10 +6,10 @@ namespace botao{
 }
 
 // Servo
-#define LIM_SUP_DEDAO 180
+#define LIM_SUP_DEDAO 90
 #define LIM_INF_DEDAO 0
-#define LIM_SUP_DEDOS 180
-#define LIM_INF_DEDOS 0
+#define LIM_SUP_DEDOS 0
+#define LIM_INF_DEDOS 90
 #define TIME_SERVOS 1000
 
 #define SERVO_TUMB_PIN 27
@@ -55,7 +55,7 @@ const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TF
 
 // Codigo das cores são encontrados a partir da conversão do código hexadecimal para decimal
 #define PIN_LED 13
-#define NUM_COLORS 7
+
 #define AMARELO 16768256 
 #define VERMELHO 16515843
 #define VERDE 63240
@@ -68,3 +68,6 @@ const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TF
 #define VINHO 15759367
 
 const int colors[] = {VERMELHO, VERDE, AZUL, AMARELO, VINHO, CIANO_ESCURO, MAGENTA, CIANO, LARANJA, LIMAO};
+
+
+enum comands{abrir_mao=1,fechar_mao=2,abrir_dedao=3,fechar_dedao=4,abrir_dedos=5,fechar_dedos=6,esperar=7};

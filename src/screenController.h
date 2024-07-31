@@ -23,6 +23,7 @@ class Funcoes{
         const unsigned long debounceDelay = 50;
         int error = 0;
       
+      
         
     public:
         Funcoes(int index):index(index){}
@@ -32,8 +33,9 @@ class Funcoes{
         void select(int &index, int &button, TFT_eSPI &d);
         void init_screen(TFT_eSPI &d);
         void execStack( TFT_eSPI &d);
+        void check_error();
         //recieves message and color -> show message in screen with the leter in the color 
-        void show_pop_up(TFT_eSPI &d,const char* message,int textColor);
+        void show_pop_up(TFT_eSPI &d,const char* message,int textColor,int text_size);
 
 };
 
@@ -43,39 +45,45 @@ void Funcoes::execStack( TFT_eSPI &d){
         switch (stack[i]){
             //Func abrir mao
             case 1:
-                show_pop_up(d,"Abrir Mao",TFT_RED);
+                show_pop_up(d,"Abrir Mao",TFT_RED,2);
                 servo_tumb.control.write(LIM_SUP_DEDAO);
                 servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func fecha mao
             case 2:
+                show_pop_up(d,"Fecha Mao",TFT_GREEN,2);
                 servo_tumb.control.write(LIM_INF_DEDAO);
                 servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func abrir dedao
             case 3:
-                servo_fingers.control.write(LIM_SUP_DEDAO);
+                show_pop_up(d,"Abrir Dedao",TFT_SKYBLUE,2);
+                servo_tumb.control.write(LIM_SUP_DEDAO);
                 delay(TIME_SERVOS);
                 break;
             //Func fechar dedao
             case 4:
-                servo_fingers.control.write(LIM_INF_DEDAO);
+                show_pop_up(d,"Fecha Dedao",TFT_YELLOW,2);
+                servo_tumb.control.write(LIM_INF_DEDAO);
                 delay(TIME_SERVOS);
                 break;
             //Func abre dedos
             case 5:
-                servo_tumb.control.write(LIM_SUP_DEDOS);
+                show_pop_up(d,"Abre Dedos",TFT_YELLOW,2);  
+                servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func fecha dedos
             case 6:
-                servo_tumb.control.write(LIM_INF_DEDOS);
+                show_pop_up(d,"Fecha Dedos",TFT_BLUE,2);  
+                servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
             //Func espera
             case 7:
+                 show_pop_up(d,"Espera",TFT_VIOLET,2);  
                 delay(T_ESPERA);
                 break;
         }
@@ -90,22 +98,23 @@ void Funcoes::init_screen(TFT_eSPI &d){
     d.setTextSize(4);
     d.setSwapBytes(true);
     //d.pushImage(20,20,196,240,logo);
-    delay(2000);
-    // Define a cor e o tamanho do texto
-    d.setTextDatum(TC_DATUM);
-    d.setCursor(50, 90);
-    String name = "O PROJETO\n     HAND ";
-    for (int i = 0; i < name.length(); i++) {
-        d.print(name[i]);
-        delay(100);
-    }
+    // delay(2000);
+    // // Define a cor e o tamanho do texto
+    // d.setTextDatum(TC_DATUM);
+    // d.setCursor(50, 90);
+    // String name = "O PROJETO\n     HAND ";
+    // for (int i = 0; i < name.length(); i++) {
+    //     d.print(name[i]);
+    //     delay(100);
+    // }
     delay(1500);
     d.fillScreen(TFT_WHITE);
     
 }
 
-void Funcoes::show_pop_up(TFT_eSPI &d, const char* message, int textColor) {
+void Funcoes::show_pop_up(TFT_eSPI &d, const char* message, int textColor,int text_size) {
     d.fillScreen(TFT_WHITE);
+    d.setTextSize(text_size);
     d.setTextColor(textColor);
     d.setTextDatum(TC_DATUM);
     d.drawCentreString(message, 160, 80, 4);
@@ -131,6 +140,7 @@ void Funcoes::track_position(int &index, int &button){
 
 void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
     int i, j;
+    //? pq igual a 3 
     if(button == 3){
             if(index <= 6 && stackSize < MAX_STACK_SIZE){
                 stack[stackSize++] = index+1;
@@ -203,7 +213,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
         funcoes.setCursor(0, 160);
         funcoes.println(" Remover");
         funcoes.setCursor(0, 190);
-        funcoes.setTextColor(TFT_RED, TFT_BLACK);
+        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
         funcoes.println(" Remover tudo");
         funcoes.setTextColor(TFT_BLACK);
 
@@ -221,7 +231,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
         funcoes.setCursor(0, 160);
         funcoes.println(" 7.Esperar");
         funcoes.setCursor(0, 190);
-        funcoes.setTextColor(TFT_RED, TFT_BLACK);
+        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
         funcoes.println(" Remover");
         funcoes.setTextColor(TFT_BLACK);
 
@@ -305,13 +315,94 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
     stackSprite.setTextColor(TFT_BLACK);
     stackSprite.printf("Pilha");
     for (int i = 0; i < stackSize; i++) {
-        stackSprite.setCursor(220, 20 + i * 25); // Ajuste o espaçamento conforme necessário
+        stackSprite.setCursor(200, 20 + i * 25); // Ajuste o espaçamento conforme necessário
         stackSprite.setTextColor(TFT_BLACK, backColors[stack[i]-1]);
         stackSprite.printf(" %d \n", stack[i]);
     }
-    stackSprite.setCursor(0, 210);
-    stackSprite.setTextColor(TFT_BLACK);
-    stackSprite.printf("%d Erros", error);
+    // stackSprite.setCursor(50, 210);
+    // stackSprite.setTextColor(TFT_BLACK);
+    // stackSprite.printf("%d Erros", error);
+
+    error = 3;
+    for(int j=0; j<=error;j++){
+
+    stackSprite.fillRoundRect(75,210-(35*j),20,30,1,TFT_RED);
+    }
     stackSprite.pushSprite(220, 0);
+
+}
+
+// check for conditions that cause prog errors 
+void Funcoes::check_error(){
+    
+    int current_state,last_state; 
+    bool finger_closed,tumb_closed; 
+    
+    for(int i = 0; i<=stackSize; i++){
+
+        current_state = stack[i];
+        // check for last relevant state (ignore delay)
+        if(current_state!=7){
+            if(current_state==1){
+                finger_closed = false;
+                tumb_closed = false; 
+            }
+             if(current_state==2){
+                finger_closed = true;
+                tumb_closed = true; 
+            }
+
+            if(current_state==3){
+        
+                tumb_closed = false; 
+            }
+
+            
+            if(current_state==4){
+        
+                tumb_closed = true; 
+            }
+
+            if(current_state==5){
+        
+                finger_closed = false; 
+            }
+            
+            if(current_state==6){
+        
+                finger_closed = true; 
+            }
+
+            
+            //state 1 dont have any error possible 
+
+            //state 2 dont have any error possible 
+
+            //state 3 dont have any error possible 
+
+            //state 4 dont have any error possible 
+
+            //cant open finger if tumb is closed -> mecanical error 
+            if(current_state==5 && tumb_closed){
+                error = error + 1 ;
+            }
+
+            //cant close finger if tumb is closed -> mecanical error 
+            if(current_state==6 && tumb_closed){
+                error = error + 1 ;
+            }
+
+            //cant repeat states 
+            if(last_state==current_state){
+                 error = error + 1 ;
+            }
+             
+        }
+
+
+
+    }
+
+    //machine_state to check for errors 
 
 }

@@ -73,8 +73,10 @@ void loop() {
     //? update image ? 
     funcao.draw_funcoes(funcoes, index_, stack);
     if((button_press = readButton()) && (button_press != last_button)){
+        // funcao.check_error();
         funcao.track_position(index_, button_press);
         funcao.select(index_, button_press, tft);
+
     }
     last_button = button_press;
     

@@ -216,16 +216,16 @@ void Funcoes::init_screen(TFT_eSPI &d){
     d.setTextColor(TFT_BLUE);
     d.setTextSize(4);
     d.setSwapBytes(true);
-    //d.pushImage(20,20,196,240,logo);
-    // delay(2000);
-    // // Define a cor e o tamanho do texto
-    // d.setTextDatum(TC_DATUM);
-    // d.setCursor(50, 90);
-    // String name = "O PROJETO\n     HAND ";
-    // for (int i = 0; i < name.length(); i++) {
-    //     d.print(name[i]);
-    //     delay(100);
-    // }
+    // d.pushImage(20,20,196,240,logo);
+    delay(2000);
+    // Define a cor e o tamanho do texto
+    d.setTextDatum(TC_DATUM);
+    d.setCursor(50, 90);
+    String name = "O PROJETO\n     HAND ";
+    for (int i = 0; i < name.length(); i++) {
+        d.print(name[i]);
+        delay(100);
+    }
     delay(1500);
     d.fillScreen(TFT_WHITE);
     

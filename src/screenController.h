@@ -323,12 +323,14 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
     // stackSprite.setTextColor(TFT_BLACK);
     // stackSprite.printf("%d Erros", error);
 
-    error = 3;
-    for(int j=0; j<=error;j++){
+    if(error!=0){
 
-    stackSprite.fillRoundRect(75,210-(35*j),20,30,1,TFT_RED);
+        for(int j=0; j<=error;j++){
+
+        stackSprite.fillRoundRect(75,210-(35*j),20,30,1,TFT_RED);
+        }
     }
-    stackSprite.pushSprite(220, 0);
+        stackSprite.pushSprite(220, 0);
 
 }
 

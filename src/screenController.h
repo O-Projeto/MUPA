@@ -284,6 +284,7 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
                         // ALE MUDOU AQUI !!!
                         check_error();
                         if(error == 0 && stackSize > 0) execStack(d);
+                        else if(error > 0) show_pop_up(d,"ERRO",TFT_RED,4);  
                         
                         // error = 0;
                         break;

@@ -263,9 +263,6 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
     if(button == 3){
             if(index <= 6 && stackSize < MAX_STACK_SIZE){
                 stack[stackSize++] = index+1;
-                
-                
-
                 check_error();
             }
             else{
@@ -283,8 +280,12 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
                         break;
                     case 9: 
                         //exec stack
-                        execStack(d);
-                        error = 0;
+                        
+                        // ALE MUDOU AQUI !!!
+                        check_error();
+                        if(error == 0 && stackSize > 0) execStack(d);
+                        
+                        // error = 0;
                         break;
                 }
             }

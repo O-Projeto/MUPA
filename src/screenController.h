@@ -8,6 +8,7 @@
 // #include <logo.h>
 
 
+
 ServoController servo_tumb = ServoController(SERVO_TUMB_PIN);
 ServoController servo_fingers = ServoController(SERVO_FINGER_PIN);
 
@@ -22,6 +23,19 @@ class Funcoes{
         unsigned long lastDebounceTimeBotoes = 0;
         const unsigned long debounceDelay = 50;
         int error = 0, tempo = millis();
+        
+        // state machine
+        int state = START;
+        int last_state = START;
+        int state_before_delay = START;
+        bool trigger_delay = false;
+        
+        bool cmd_open_fingers = false; 
+        bool cmd_close_fingers = false; 
+        bool cmd_open_thumb = false; 
+        bool cmd_close_thumb = false; 
+        bool cmd_delay = false; 
+        bool cmd_reset = false; 
       
         
     public:
@@ -35,8 +49,105 @@ class Funcoes{
         void check_error();
         //recieves message and color -> show message in screen with the leter in the color 
         void show_pop_up(TFT_eSPI &d,const char* message,int textColor,int text_size);
+        void StateMachine();
 
 };
+
+void Funcoes::StateMachine(){
+
+    last_state = state;
+
+
+    // ------------------------------------------
+    // Filter
+    // ------------------------------------------
+
+    // any state -> delay
+    if(cmd_delay){
+        if(state != DELAY) state_before_delay = state;
+        trigger_delay = true;
+        state = DELAY;
+    }
+
+    // any state -> reset
+    if(cmd_reset){
+        state = START;
+    }
+
+    // ------------------------------------------
+    // Transition
+    // ------------------------------------------
+    
+    switch (state)
+    {
+    case START:
+        
+        state = FINGERS_OPEN_THUMB_OPEN;
+
+        cmd_close_fingers = false;
+        cmd_open_fingers = false;
+        cmd_close_thumb = false;
+        cmd_open_thumb = false;
+        cmd_delay = false;
+        
+        break;
+
+    case FINGERS_OPEN_THUMB_OPEN:
+
+        if(cmd_close_fingers && cmd_close_thumb){
+            state = FINGERS_CLOSE_THUMB_CLOSE;
+        }
+        else if(cmd_close_fingers){
+            state = FINGERS_CLOSE_THUMB_OPEN;
+        }
+        else if(cmd_close_thumb){
+            state = FINGERS_OPEN_THUMB_CLOSE;
+        }
+
+        break;
+
+    case FINGERS_CLOSE_THUMB_OPEN:
+        
+        if(cmd_open_fingers){
+            state = FINGERS_OPEN_THUMB_OPEN;
+        }
+        else if(cmd_close_thumb){
+            state = FINGERS_CLOSE_THUMB_CLOSE;
+        }
+        break;
+
+    case FINGERS_OPEN_THUMB_CLOSE:
+        
+        if(cmd_open_thumb){
+            state = FINGERS_OPEN_THUMB_OPEN;
+        }
+        break;
+
+    case FINGERS_CLOSE_THUMB_CLOSE:
+        
+        if(cmd_open_thumb && cmd_open_fingers){
+            state = FINGERS_OPEN_THUMB_OPEN;
+        }
+        else if(cmd_open_thumb){
+            state = FINGERS_CLOSE_THUMB_OPEN;
+        }
+        break;
+
+    case DELAY:
+        if(trigger_delay == false)
+            state = state_before_delay;
+        else trigger_delay = false;
+        break;
+    
+    default:
+        break;
+    }
+
+    // ------------------------------------------
+    // Output
+    // ------------------------------------------
+
+}
 
 void Funcoes::execStack( TFT_eSPI &d){
     int i;
@@ -148,6 +259,9 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
     if(button == 3){
             if(index <= 6 && stackSize < MAX_STACK_SIZE){
                 stack[stackSize++] = index+1;
+                
+                
+
                 check_error();
             }
             else{
@@ -155,7 +269,7 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
                     case 7:
                         if (stackSize > 0) {
                             stackSize--;
-                            error = 0;
+
                             check_error();
                         }
                         break;
@@ -332,7 +446,7 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
     // stackSprite.printf("%d Erros", error);
     if(millis() - tempo > 3000){
         tempo = millis();
-        Serial.println(error);
+        // Serial.println(error);
     }
     if(error!=0){
 
@@ -350,69 +464,104 @@ void Funcoes::check_error(){
     error = 0;
     int current_state = 0,last_state = 1;
     bool finger_closed = false,tumb_closed = false;  
+
+    // clean state buffer
+    state = START;
+    StateMachine();
+
     for(int i = 0; i<stackSize; i++){
 
-        current_state = stack[i];
-        if(i > 0){
-            last_state = stack[i-1];
+        int cmd = stack[i];
+        // 1 -> abre mao
+        // 2 -> fecha mao
+        // 3 -> abre dedao
+        // 4 -> fecha dedao
+        // 5 -> abre dedos
+        // 6 -> fecha dedos
+        // 7 -> espera
+
+        cmd_open_fingers = (cmd == 1 || cmd == 5);
+        cmd_close_fingers = (cmd == 2 || cmd == 6);
+        
+        cmd_open_thumb = (cmd == 1 || cmd == 3);
+        cmd_close_thumb = (cmd == 2 || cmd == 4);
+
+        cmd_delay = (cmd == 7);
+        int state_x = state;
+        StateMachine();
+        if(state_x == state && state != DELAY) error++;
+        else if(state_x == DELAY){
+            if(state == state_before_delay) error++;
         }
-        // check for last relevant state (ignore delay)
-        if(current_state!=7){
-            if(current_state==1){
-                finger_closed = false;
-                tumb_closed = false; 
-            }
-             if(current_state==2){
-                finger_closed = true;
-                tumb_closed = true; 
-            }
+        Serial.println(state);
+        Serial.println(error);
 
-            if(current_state==3){
-        
-                tumb_closed = false; 
-            }
+        // current_state = stack[i];
 
-            
-            if(current_state==4){
-        
-                tumb_closed = true; 
-            }
+        // if(i > 0){
+        //     last_state = stack[i-1];
+        // }
+        // // check for last relevant state (ignore delay)
+        // if(current_state!=7){
+        //     if(current_state==1){
+        //         finger_closed = false;
+        //         tumb_closed = false; 
+        //     }
+        //      if(current_state==2){
+        //         finger_closed = true;
+        //         tumb_closed = true; 
+        //     }
 
-            if(current_state==5){
-        
-                finger_closed = false; 
-            }
-            
-            if(current_state==6){
-        
-                finger_closed = true; 
-            }
+        //     if(current_state==3){
+        //         tumb_closed = false; 
+        //     }
 
             
-            //state 1 dont have any error possible 
+        //     if(current_state==4){
+        
+        //         tumb_closed = true; 
+        //     }
 
-            //state 2 dont have any error possible 
+        //     if(current_state==5){
+            
 
-            //state 3 dont have any error possible 
+        //         finger_closed = false; 
+        //     }
+            
+        //     if(current_state==6){
+        
+        //         finger_closed = true; 
+        //     }
 
-            //state 4 dont have any error possible 
+            
+        //     //state 1 dont have any error possible 
 
-            //cant open finger if tumb is closed -> mecanical error
-            if(current_state==5 && tumb_closed){
-                error = error + 1 ;
-            }
+        //     //state 2 dont have any error possible 
 
-            //cant close finger if tumb is closed -> mecanical error 
-            if(current_state==6 && tumb_closed){
-                error = error + 1 ;
-            }
+        //     //state 3 dont have any error possible 
 
-            //cant repeat states 
-            if(last_state==current_state){
-                 error = error + 1 ;
-            }
+        //     //state 4 dont have any error possible 
+
+        //     //cant open finger if tumb is closed -> mecanical error
+        //     if(current_state==5 && tumb_closed){
+        //         error = error + 1 ;
+        //     }
+
+        //     //cant close finger if tumb is closed -> mecanical error 
+        //     if(current_state==6 && tumb_closed){
+        //         error = error + 1 ;
+        //     }
+
+        //     //cant repeat states 
+        //     if(last_state==current_state){
+        //          error = error + 1 ;
+        //     }
+
+        //     if(current_state == 5 && finger_closed){
+        //         error += 1;
+        //     }
              
-        }
+        // }
 
 
 

@@ -70,4 +70,23 @@ const int backColors[] = {TFT_RED, TFT_GREEN, TFT_CYAN, TFT_YELLOW, TFT_WINE, TF
 const int colors[] = {VERMELHO, VERDE, AZUL, AMARELO, VINHO, CIANO_ESCURO, MAGENTA, CIANO, LARANJA, LIMAO};
 
 
-enum comands{abrir_mao=1,fechar_mao=2,abrir_dedao=3,fechar_dedao=4,abrir_dedos=5,fechar_dedos=6,esperar=7};
+enum comands{
+    abrir_mao=1,
+    fechar_mao=2,
+    abrir_dedao=3,
+    fechar_dedao=4,
+    abrir_dedos=5,
+    fechar_dedos=6,
+    esperar=7};
+
+enum STATES {
+
+    START = 0,
+    FINGERS_OPEN_THUMB_OPEN = 10,
+    FINGERS_CLOSE_THUMB_CLOSE = 20,
+    FINGERS_CLOSE_THUMB_OPEN = 30,
+    FINGERS_OPEN_THUMB_CLOSE = 40,
+    DELAY = 50
+
+
+};

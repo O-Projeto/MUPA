@@ -55,7 +55,7 @@ class Funcoes{
 
 void Funcoes::StateMachine(){
 
-    last_state = state;
+    if(state != DELAY) last_state = state;
 
 
     // ------------------------------------------
@@ -74,6 +74,10 @@ void Funcoes::StateMachine(){
         state = START;
     }
 
+    // return from delay
+    if(state == DELAY && trigger_delay == false)
+        state = state_before_delay;
+
     // ------------------------------------------
     // Transition
     // ------------------------------------------
@@ -89,6 +93,7 @@ void Funcoes::StateMachine(){
         cmd_close_thumb = false;
         cmd_open_thumb = false;
         cmd_delay = false;
+        state_before_delay = START;
         
         break;
 
@@ -134,9 +139,8 @@ void Funcoes::StateMachine(){
         break;
 
     case DELAY:
-        if(trigger_delay == false)
-            state = state_before_delay;
-        else trigger_delay = false;
+        
+        if(trigger_delay) trigger_delay = false;
         break;
     
     default:
@@ -464,10 +468,20 @@ void Funcoes::check_error(){
     error = 0;
     int current_state = 0,last_state = 1;
     bool finger_closed = false,tumb_closed = false;  
+    int state_x;
+
+
+    Serial.println("------------------------------------");
+    Serial.println("NEW CYCLE: ");
+    Serial.println("------------------------------------");
 
     // clean state buffer
-    state = START;
+    cmd_reset = true;
     StateMachine();
+    state_x = state;
+    Serial.print("update start: ");
+    Serial.println(state_x);
+    cmd_reset = false;
 
     for(int i = 0; i<stackSize; i++){
 
@@ -487,14 +501,25 @@ void Funcoes::check_error(){
         cmd_close_thumb = (cmd == 2 || cmd == 4);
 
         cmd_delay = (cmd == 7);
-        int state_x = state;
+        if(state != DELAY) state_x = state;
         StateMachine();
-        if(state_x == state && state != DELAY) error++;
-        else if(state_x == DELAY){
-            if(state == state_before_delay) error++;
+        if(state_x == state && state != DELAY){
+            error++;
+
         }
-        Serial.println(state);
-        Serial.println(error);
+            Serial.println("---------------------");
+            Serial.print("last state: ");
+            Serial.println(state_x);
+            Serial.print("state: ");
+            Serial.println(state);
+            Serial.print("state before delay: ");
+            Serial.println(state_before_delay);
+            Serial.print("error: ");
+            Serial.println(error);
+        // if(last_state == state && state != DELAY) error++;
+        // else if(state_x == DELAY){
+        //     if(state == state_before_delay) error++;
+        // }
 
         // current_state = stack[i];
 

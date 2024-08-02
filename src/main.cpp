@@ -9,6 +9,7 @@
 
 
 
+
 led_rgb LED;
 
 
@@ -46,9 +47,11 @@ void setup() {
     tft.init();
     tft.setRotation(3);
     tft.fillScreen(TFT_WHITE);
+    tft.setSwapBytes(true);
 
     funcoes.setColorDepth(8);
     funcoes.createSprite(220, 240);
+
 
     stack.setColorDepth(8);
     stack.createSprite(100, 240);  
@@ -57,6 +60,10 @@ void setup() {
     pinMode(botao::button_1, INPUT_PULLUP);
     pinMode(botao::button_2, INPUT_PULLUP);
     pinMode(botao::button_3, INPUT_PULLUP);
+
+    servo_tumb.control.write(LIM_SUP_DEDAO);
+    delay(500);
+    servo_fingers.control.write(LIM_SUP_DEDOS);
 
 
     xTaskCreatePinnedToCore(
@@ -67,7 +74,7 @@ void setup() {
                     1,           /* priority of the task */
                     &Task1,      /* Task handle to keep track of created task */
                     0);          /* pin task to core 0 */
-    
+  
 }
 
 void loop() {

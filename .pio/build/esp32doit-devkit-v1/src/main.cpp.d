@@ -230,4 +230,4 @@
  lib/TFT_eSPI-master/Fonts/Custom/Yellowtail_32.h \
  lib/TFT_eSPI-master/Extensions/Smooth_font.h \
  lib/TFT_eSPI-master/Extensions/Button.h \
- lib/TFT_eSPI-master/Extensions/Sprite.h
+ lib/TFT_eSPI-master/Extensions/Sprite.h src/logo_projeto_bit_map.c

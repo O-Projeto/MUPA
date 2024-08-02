@@ -6,7 +6,7 @@ namespace botao{
 }
 
 // Servo
-#define LIM_SUP_DEDAO 90
+#define LIM_SUP_DEDAO 180
 #define LIM_INF_DEDAO 0
 #define LIM_SUP_DEDOS 0
 #define LIM_INF_DEDOS 90

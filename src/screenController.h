@@ -5,7 +5,7 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include <ServoController.hpp>
-// #include <logo.h>
+#include "logo_projeto_bit_map.c"
 
 
 
@@ -161,6 +161,7 @@ void Funcoes::execStack( TFT_eSPI &d){
             case 1:
                 show_pop_up(d,"Abrir Mao",TFT_RED,2);
                 servo_tumb.control.write(LIM_SUP_DEDAO);
+                delay(1000);
                 servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
                 break;
@@ -168,6 +169,7 @@ void Funcoes::execStack( TFT_eSPI &d){
             case 2:
                 show_pop_up(d,"Fecha Mao",TFT_GREEN,2);
                 servo_tumb.control.write(LIM_INF_DEDAO);
+                delay(1000);
                 servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
                 break;
@@ -202,7 +204,7 @@ void Funcoes::execStack( TFT_eSPI &d){
                 break;
         }
     }
-    delay(3000);
+    delay(1000);
     servo_tumb.control.write(LIM_SUP_DEDAO);
     delay(500);
     servo_fingers.control.write(LIM_SUP_DEDOS);
@@ -216,8 +218,10 @@ void Funcoes::init_screen(TFT_eSPI &d){
     d.setTextColor(TFT_BLUE);
     d.setTextSize(4);
     d.setSwapBytes(true);
-    // d.pushImage(20,20,196,240,logo);
-    delay(2000);
+    d.pushImage(0,5,320,240,logo_projeto_bit_map);
+    delay(1500);
+    d.fillScreen(TFT_WHITE);
+     
     // Define a cor e o tamanho do texto
     d.setTextDatum(TC_DATUM);
     d.setCursor(50, 90);

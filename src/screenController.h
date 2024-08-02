@@ -5,8 +5,8 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include <ServoController.hpp>
-#include "logo_projeto_bit_map.c"
-
+#include "mupaMenor.c"
+#include "logo_110.c"
 
 
 ServoController servo_tumb = ServoController(SERVO_TUMB_PIN);
@@ -218,8 +218,10 @@ void Funcoes::init_screen(TFT_eSPI &d){
     d.setTextColor(TFT_BLUE);
     d.setTextSize(6);
     d.setSwapBytes(true);
-    d.pushImage(0,5,320,240,logo_projeto_bit_map);
-    delay(1500);
+    d.pushImage(50,50,110,110,logo_110);
+    d.pushImage(160,60,100,100,mupaMenor);
+   
+    delay(1700);
     d.fillScreen(TFT_WHITE);
      
     // Define a cor e o tamanho do texto

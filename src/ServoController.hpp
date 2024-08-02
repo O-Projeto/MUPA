@@ -1,9 +1,9 @@
+#pragma once
 #include <Arduino.h>
 #include <ESP32Servo.h>
 
 
-class ServoController
-{
+class ServoController{
 private:
 
 

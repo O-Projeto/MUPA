@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include "config.h"
 #include "screenController.h"
+#include "imagem.h"
 
 
 TFT_eSPI tft = TFT_eSPI();
@@ -19,6 +20,7 @@ void setup() {
   tft.init(); // Inicializa o display
   tft.setRotation(3); // Define a rotação do display
   tft.fillScreen(TFT_WHITE); // Preenche a tela com a cor preta
+  tft.setSwapBytes(true);
 
   pinMode(botao::button_1, INPUT);
   pinMode(botao::button_2, INPUT);
@@ -30,6 +32,8 @@ void setup() {
   stack.setColorDepth(8);
   stack.createSprite(70, 240);  
   funcao.init_screen(tft);
+  tft.pushImage(20,20,196,240,imagem);
+  delay(1000);
 }
 
 void loop() {

@@ -164,43 +164,50 @@ void Funcoes::execStack( TFT_eSPI &d){
                 delay(1000);
                 servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func fecha mao
             case 2:
-                show_pop_up(d,"Fecha Mao",TFT_GREEN,2);
+                show_pop_up(d,"Fechar Mao",TFT_GREEN,2);
                 servo_tumb.control.write(LIM_INF_DEDAO);
                 delay(1000);
                 servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func abrir dedao
             case 3:
                 show_pop_up(d,"Abrir Dedao",TFT_SKYBLUE,2);
                 servo_tumb.control.write(LIM_SUP_DEDAO);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func fechar dedao
             case 4:
-                show_pop_up(d,"Fecha Dedao",TFT_YELLOW,2);
+                show_pop_up(d,"Fechar Dedao",TFT_YELLOW,2);
                 servo_tumb.control.write(LIM_INF_DEDAO);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func abre dedos
             case 5:
-                show_pop_up(d,"Abre Dedos",TFT_YELLOW,2);  
+                show_pop_up(d,"Abrir Dedos",TFT_YELLOW,2);  
                 servo_fingers.control.write(LIM_SUP_DEDOS);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func fecha dedos
             case 6:
-                show_pop_up(d,"Fecha Dedos",TFT_BLUE,2);  
+                show_pop_up(d,"Fechar Dedos",TFT_BLUE,2);  
                 servo_fingers.control.write(LIM_INF_DEDOS);
                 delay(TIME_SERVOS);
+                d.fillScreen(TFT_WHITE);
                 break;
             //Func espera
             case 7:
-                 show_pop_up(d,"Espera",TFT_VIOLET,2);  
+                 show_pop_up(d,"Esperar",TFT_VIOLET,2);  
                 delay(T_ESPERA);
+                d.fillScreen(TFT_WHITE);
                 break;
         }
     }
@@ -208,7 +215,7 @@ void Funcoes::execStack( TFT_eSPI &d){
     servo_tumb.control.write(LIM_SUP_DEDAO);
     delay(500);
     servo_fingers.control.write(LIM_SUP_DEDOS);
-    delay(TIME_SERVOS);
+    //delay(TIME_SERVOS);
 }
 
 
@@ -244,7 +251,7 @@ void Funcoes::show_pop_up(TFT_eSPI &d, const char* message, int textColor,int te
     d.setTextDatum(TC_DATUM);
     d.drawCentreString(message, 160, 80, 4);
     delay(2000);
-    d.fillScreen(TFT_WHITE);
+    //d.fillScreen(TFT_WHITE);
 }
 void Funcoes::track_position(int &index, int &button){
     switch(button){
@@ -267,30 +274,33 @@ void Funcoes::select(int &index, int &button, TFT_eSPI &d) {
     int i, j;
     //? pq igual a 3 
     if(button == 3){
-            if(index <= 6 && stackSize < MAX_STACK_SIZE){
-                stack[stackSize++] = index+1;
+            if(index >= 3 && stackSize < MAX_STACK_SIZE){
+                stack[stackSize++] = index-2;
                 check_error();
             }
             else{
                 switch (index){
-                    case 7:
+                    case 1:
                         if (stackSize > 0) {
                             stackSize--;
 
                             check_error();
                         }
                         break;
-                    case 8:
+                    case 2:
                         stackSize = 0;
                         error = 0;
                         break;
-                    case 9: 
+                    case 0:
                         //exec stack
                         
                         // ALE MUDOU AQUI !!!
                         check_error();
                         if(error == 0 && stackSize > 0) execStack(d);
-                        else if(error > 0) show_pop_up(d,"ERRO",TFT_RED,4);  
+                        else if(error > 0){
+                            show_pop_up(d,"ERRO",TFT_RED,4);
+                            d.fillScreen(TFT_WHITE);
+                        }
                         
                         // error = 0;
                         break;
@@ -317,128 +327,156 @@ void Funcoes::draw_funcoes(TFT_eSprite &funcoes, int &index, TFT_eSprite &stackS
     funcoes.setCursor(0, 10); 
     funcoes.setTextColor(TFT_BLACK);
     if(index == 9){
-        funcoes.println(" 4.Abrir dedao");
+        funcoes.println(" 1.Abrir mao");
         funcoes.setCursor(0, 40);
-        funcoes.println(" 5.Abrir dedos");
+        funcoes.println(" 2.Fechar mao");
         funcoes.setCursor(0, 70);
-        funcoes.println(" 6.Fechar dedos");
+        funcoes.println(" 3.Abrir dedao");
         funcoes.setCursor(0, 100);
-        funcoes.println(" 7.Esperar");
+        funcoes.println(" 4.Abrir dedao");
         funcoes.setCursor(0, 130);
-        funcoes.println(" Remover");
+        funcoes.println(" 5.Abrir dedos");
         funcoes.setCursor(0, 160);
-        funcoes.println(" Remover tudo");
+        funcoes.println(" 6.Fechar dedos");
         funcoes.setCursor(0, 190);
-        funcoes.setTextColor(TFT_GREEN, TFT_BLACK);
-        funcoes.println(" Executar");
+        funcoes.setTextColor(TFT_WHITE, TFT_MAGENTA);
+        funcoes.println(" 7.Esperar");
         funcoes.setTextColor(TFT_BLACK);
 
     }
     else if(index == 8){
-        funcoes.println(" 3.Abrir dedao");
-        funcoes.setCursor(0, 40);
-        funcoes.println(" 4.Fechar dedao");
-        funcoes.setCursor(0, 70);
-        funcoes.println(" 5.Abrir dedos");
-        funcoes.setCursor(0, 100);
-        funcoes.println(" 6.Fechar dedos");
-        funcoes.setCursor(0, 130);
-        funcoes.println(" 7.Esperar");
-        funcoes.setCursor(0, 160);
         funcoes.println(" Remover");
+        funcoes.setCursor(0, 40);
+        funcoes.println(" 1.Abrir mao");
+        funcoes.setCursor(0, 70);
+        funcoes.println(" 2.Fechar mao");
+        funcoes.setCursor(0, 100);
+        funcoes.println(" 3.Abrir dedao");
+        funcoes.setCursor(0, 130);
+        funcoes.println(" 4.Fechar dedao");
+        funcoes.setCursor(0, 160);
+        funcoes.println(" 5.Abrir dedos");
         funcoes.setCursor(0, 190);
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
-        funcoes.println(" Remover tudo");
+
+        funcoes.setTextColor(TFT_WHITE, TFT_CYAN_DARK);
+        funcoes.println(" 6.Fechar dedos");
         funcoes.setTextColor(TFT_BLACK);
 
     }
     else if(index == 7){
-        funcoes.println(" 2.Fechar mao");
-        funcoes.setCursor(0, 40);
-        funcoes.println(" 3.Abrir dedao");
-        funcoes.setCursor(0, 70);
-        funcoes.println(" 4.Fechar dedao");
-        funcoes.setCursor(0, 100);
-        funcoes.println(" 5.Abrir dedos");
-        funcoes.setCursor(0, 130);
-        funcoes.println(" 6.Fechar dedos");
-        funcoes.setCursor(0, 160);
-        funcoes.println(" 7.Esperar");
-        funcoes.setCursor(0, 190);
-        funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
         funcoes.println(" Remover");
+        funcoes.setCursor(0, 40);
+        funcoes.println(" Remover tudo");
+        funcoes.setCursor(0, 70);
+        funcoes.println(" 1.Abrir mao");
+        funcoes.setCursor(0, 100);
+        funcoes.println(" 2.Fechar mao");
+        funcoes.setCursor(0, 130);
+        funcoes.println(" 3.Abrir dedao");
+        funcoes.setCursor(0, 160);
+        funcoes.println(" 4.Fechar dedao");
+        funcoes.setCursor(0, 190);
+
+        funcoes.setTextColor(TFT_WHITE, TFT_WINE);
+        funcoes.println(" 5.Abrir dedos");
         funcoes.setTextColor(TFT_BLACK);
 
     }
     else{
         if (index == 0) {
+            funcoes.setTextColor(TFT_GREEN, TFT_BLACK);
+            funcoes.println(" Executar");
+            funcoes.setTextColor(TFT_BLACK);/*
             funcoes.setTextColor(TFT_WHITE, TFT_RED);
             funcoes.println(" 1.Abrir mao");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("pong");
         } else {
-            funcoes.println(" 1.Abrir mao");
+            funcoes.println(" Executar");
         }
 
         funcoes.setCursor(0, 40); 
         if (index == 1) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println(" Remover");
+            funcoes.setTextColor(TFT_BLACK);/*
             funcoes.setTextColor(TFT_BLACK, TFT_GREEN);
             funcoes.println(" 2.Fechar mao");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 2.Fechar mao");
+            funcoes.println(" Remover");
         }
 
         funcoes.setCursor(0, 70); 
         if (index == 2) {
+            funcoes.setTextColor(TFT_WHITE, TFT_BLACK);
+            funcoes.println(" Remover tudo");
+            funcoes.setTextColor(TFT_BLACK);
+/*
             funcoes.setTextColor(TFT_BLACK, TFT_CYAN);
             funcoes.println(" 3.Abrir dedao");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 3.Abrir dedao");
+            funcoes.println(" Remover tudo");
         }
 
         funcoes.setCursor(0, 100); 
         if (index == 3) {
+            funcoes.setTextColor(TFT_WHITE, TFT_RED);
+            funcoes.println(" 1.Abrir mao");
+            funcoes.setTextColor(TFT_BLACK);
+/*
             funcoes.setTextColor(TFT_BLACK, TFT_YELLOW);
             funcoes.println(" 4.Fechar dedao");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 4.Fechar dedao");
+            funcoes.println(" 1.Abrir mao");
         }
 
         funcoes.setCursor(0, 130); 
         if (index == 4) {
+            funcoes.setTextColor(TFT_BLACK, TFT_GREEN);
+            funcoes.println(" 2.Fechar mao");
+            funcoes.setTextColor(TFT_BLACK);
+            /*
             funcoes.setTextColor(TFT_WHITE, TFT_WINE);
             funcoes.println(" 5.Abrir dedos");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 5.Abrir dedos");
+            funcoes.println(" 2.Fechar mao");
         }
 
         
         funcoes.setCursor(0, 160); 
         if (index == 5) {
+            funcoes.setTextColor(TFT_BLACK, TFT_CYAN);
+            funcoes.println(" 3.Abrir dedao");
+            funcoes.setTextColor(TFT_BLACK);
+/*
             funcoes.setTextColor(TFT_WHITE, TFT_CYAN_DARK);
             funcoes.println(" 6.Fechar dedos");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 6.Fechar dedos");
+            funcoes.println(" 3.Abrir dedao");
         }
 
         funcoes.setCursor(0, 190); 
         if (index == 6) {
+            funcoes.setTextColor(TFT_BLACK, TFT_YELLOW);
+            funcoes.println(" 4.Fechar dedao");
+            funcoes.setTextColor(TFT_BLACK);
+/*
             funcoes.setTextColor(TFT_WHITE, TFT_MAGENTA);
             funcoes.println(" 7.Esperar");
-            funcoes.setTextColor(TFT_BLACK);
+            funcoes.setTextColor(TFT_BLACK);*/
             // Serial.println("dino");
         } else {
-            funcoes.println(" 7.Esperar");
+            funcoes.println(" 4.Fechar dedao");
         }
     }
     funcoes.pushSprite(0, 0);
@@ -515,7 +553,7 @@ void Funcoes::check_error(){
             error++;
 
         }
-            Serial.println("---------------------");
+            /*Serial.println("---------------------");
             Serial.print("last state: ");
             Serial.println(state_x);
             Serial.print("state: ");
@@ -523,7 +561,7 @@ void Funcoes::check_error(){
             Serial.print("state before delay: ");
             Serial.println(state_before_delay);
             Serial.print("error: ");
-            Serial.println(error);
+            Serial.println(error);*/
         // if(last_state == state && state != DELAY) error++;
         // else if(state_x == DELAY){
         //     if(state == state_before_delay) error++;

@@ -216,7 +216,7 @@ void Funcoes::init_screen(TFT_eSPI &d){
     
     d.fillScreen(TFT_WHITE);
     d.setTextColor(TFT_BLUE);
-    d.setTextSize(4);
+    d.setTextSize(6);
     d.setSwapBytes(true);
     d.pushImage(0,5,320,240,logo_projeto_bit_map);
     delay(1500);
@@ -224,8 +224,8 @@ void Funcoes::init_screen(TFT_eSPI &d){
      
     // Define a cor e o tamanho do texto
     d.setTextDatum(TC_DATUM);
-    d.setCursor(50, 90);
-    String name = "O PROJETO\n     HAND ";
+    d.setCursor(90, 100);
+    String name = "HAND";
     for (int i = 0; i < name.length(); i++) {
         d.print(name[i]);
         delay(100);
